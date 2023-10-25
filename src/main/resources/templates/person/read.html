@@ -5,7 +5,7 @@
       layout:decorate="~{layouts/base}" lang="en">
 
 <head>    <!-- Page specific head additions -->
-    <title>Person List</title>
+    <title>User List</title>
 </head>
 
 <!-- <body> -->
@@ -15,28 +15,28 @@
         <!-- Page specific body additions -->
         <header class="pb-3 mb-4 border-bottom">
             <a href="#" class="d-flex align-items-center text-light text-decoration-none">
-                <span class="fs-4">Database SQL Person</span>
+                <span class="fs-4">Database SQL User</span>
             </a>
         </header>
 
         <div class="container py-4 text-light bg-success">
 
-            <h2>Person Viewer</h2>
-            <a th:href="@{/mvc/person/create/}">Create Person</a>
+            <h2>User Viewer</h2>
+            <a th:href="@{/mvc/person/create/}">Create User</a>
             <div class="row align-items-md-stretch">
                 <table class="table">
                     <thead>
                     <tr>
                         <th>ID</th>
                         <th>User ID</th>
-                        <th>Person</th>
+                        <th>User</th>
                         <th>Age</th>
                         <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="person : ${list}">
-                        <td th:text="${person.id}">Person ID</td>
+                        <td th:text="${person.id}">User ID</td>
                         <td th:text="${person.email}">Birth Date</td>
                         <td th:text="${person.name}">Name</td>
                         <td th:if="${person.getAge() != -1}" th:text="${person.getAge()}">Age</td>

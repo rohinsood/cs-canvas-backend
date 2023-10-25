@@ -9,7 +9,7 @@ public class MvcConfig implements WebMvcConfigurer {
     // set up your own index
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/login").setViewName("login");
+        registry.addViewController("/index").setViewName("home");
     }
 
     /* map path and location for "uploads" outside of application resources
