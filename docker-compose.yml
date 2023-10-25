@@ -1,7 +1,7 @@
 version: '3'
 services:
   web:
-    image: java_springv1
+    image: cs_canvas_backend
     build: .
     ports:
       - "8085:8085"
