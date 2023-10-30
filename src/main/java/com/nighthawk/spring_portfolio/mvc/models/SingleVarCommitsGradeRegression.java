@@ -30,5 +30,15 @@ public class SingleVarCommitsGradeRegression {
         return (n * sumCommitsGrades - sumCommits * sumGrades) / (n * sumCommits2 - sumCommits * sumCommits);
     }
 
-    
+    public static double calculateIntercept(ArrayList<Double> commits, ArrayList<Double> grades, double m) {
+        int n = commits.size();
+        double sumGrades = 0, sumCommits = 0;
+
+        for (int i = 0; i < n; i++) {
+            sumGrades += grades.get(i);
+            sumCommits += commits.get(i);
+        }
+
+        return (sumGrades - m * sumCommits) / n;
+    }
 }
