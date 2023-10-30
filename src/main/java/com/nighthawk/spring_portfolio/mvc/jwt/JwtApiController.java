@@ -17,13 +17,15 @@ public class JwtApiController {
     @PostMapping("/api/signup")
     public ResponseEntity<?> signup(@RequestParam String id, @RequestParam String name) {
         Person person = personDetailsService.getByEmail(id);
-        if (person != null) {
-            if (id.equals("mortCSA")) {
+        if (person == null) {
+            person = new Person();
+            person.setEmail(id);
+            person.setName(name);
+            if ("mortCSA".equals(id)) {
                 person.setIsTeacher(true);
             } else {
                 person.setIsStudent(true);
             }
-            person.setName(name);
             personDetailsService.save(person);
             return ResponseEntity.ok(person);
         } else {
