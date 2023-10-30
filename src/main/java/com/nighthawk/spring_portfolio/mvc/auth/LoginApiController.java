@@ -24,5 +24,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/login")
 
 public class LoginApiController {
+    @Autowired
+    LoginHandler handler;
+
+    @Autowired
+    PersonJpaRepository personJpaRepository;
     
 }
