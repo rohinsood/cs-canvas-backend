@@ -21,5 +21,22 @@ public class MultiVarAnalyticsGradeRegression {
         System.out.println("Coefficients: " + Arrays.toString(coefficients));
     }
 
-    
+    public static double[] calculateCoefficients(double[][] xData, double[] yData) {
+        int n = xData.length;
+        int m = xData[0].length;
+
+        // Construct matrix X and vector Y
+        RealMatrix X = new Array2DRowRealMatrix(n, m + 1);
+        RealVector Y = new ArrayRealVector(yData, false);
+
+        for (int i = 0; i < n; i++) {
+            X.setEntry(i, 0, 1);  // Bias term
+            for (int j = 0; j < m; j++) {
+                X.setEntry(i, j + 1, xData[i][j]);
+            }
+        }
+
+        // Calculate coefficients using the formula: (X^T * X + lambda*I)^(-1) * X^T * Y
+        RealMatrix Xt = X.transpose();
+        RealMatrix XtX = Xt.multiply(X);
 }
