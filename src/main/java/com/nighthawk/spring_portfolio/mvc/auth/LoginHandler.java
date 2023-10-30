@@ -17,10 +17,10 @@ public class LoginHandler {
   PersonJpaRepository personJpaRepository;
 
   // creates a person's account
-  public String createJwt(String customId) {
+  public String createJwt(String githubId) {
     var time = (new Date()).getTime() + 1000 * 60 * 60 * 24;
     return Jwts.builder()
-      .setSubject(customId) // Set the custom ID as the subject
+      .setSubject(githubId) // Set the custom ID as the subject
       .setExpiration(new Date(time))
       .signWith(key)
       .compact();
@@ -29,14 +29,14 @@ public class LoginHandler {
   // try/catch set up for searching for an account based on a custom ID
   public Person decodeJwt(String jws) {
     try {
-      String customId = Jwts.parserBuilder()
+      String githubId = Jwts.parserBuilder()
         .setSigningKey(key)
         .build()
         .parseClaimsJws(jws)
         .getBody()
         .getSubject();
 
-      return personJpaRepository.findByCustomId(customId).orElse(null);
+      return personJpaRepository.findByCustomId(githubId).orElse(null);
     } catch (Exception e) {
       System.out.println(e);
       return null;
@@ -46,8 +46,8 @@ public class LoginHandler {
   // main method to test with an example custom ID
   public static void main(String[] args) {
     LoginHandler handler = new LoginHandler();
-    String customId = "123abc"; // Replace with a custom ID
-    String jws = handler.createJwt(customId);
+    String githubId = "123abc"; // Replace with a custom ID
+    String jws = handler.createJwt(githubId);
     System.out.println(jws);
     System.out.println(handler.decodeJwt(jws));
   }
