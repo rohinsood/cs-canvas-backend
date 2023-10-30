@@ -16,5 +16,19 @@ public class SingleVarCommitsGradeRegression {
         System.out.println("Linear Regression Model for Grade based on Commits: Grade = " + m + " * Commits + " + c);
     }
 
+    public static double calculateSlope(ArrayList<Double> commits, ArrayList<Double> grades) {
+        int n = commits.size();
+        double sumCommits = 0, sumGrades = 0, sumCommitsGrades = 0, sumCommits2 = 0;
+
+        for (int i = 0; i < n; i++) {
+            sumCommits += commits.get(i);
+            sumGrades += grades.get(i);
+            sumCommitsGrades += commits.get(i) * grades.get(i);
+            sumCommits2 += commits.get(i) * commits.get(i);
+        }
+
+        return (n * sumCommitsGrades - sumCommits * sumGrades) / (n * sumCommits2 - sumCommits * sumCommits);
+    }
+
     
 }
