@@ -39,4 +39,17 @@ public class MultiVarAnalyticsGradeRegression {
         // Calculate coefficients using the formula: (X^T * X + lambda*I)^(-1) * X^T * Y
         RealMatrix Xt = X.transpose();
         RealMatrix XtX = Xt.multiply(X);
+
+        // Add regularization term
+        double lambda = 0.01;  // Regularization parameter
+        RealMatrix identity = MatrixUtils.createRealIdentityMatrix(m + 1);
+        XtX = XtX.add(identity.scalarMultiply(lambda));
+
+        RealMatrix XtXInverse = new LUDecomposition(XtX).getSolver().getInverse();
+        RealVector XtY = Xt.operate(Y);
+
+        RealVector B = XtXInverse.operate(XtY);
+
+        return B.toArray();
+    }
 }
