@@ -67,11 +67,31 @@ public class Person {
     @Column(columnDefinition = "jsonb")
     private Map<String,Map<String, Object>> stats = new HashMap<>(); 
 
+    private boolean isTeacher;
+
+    private boolean isStudent;
+
     public Person(String email, String password, String name, Date dob) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.dob = dob;
+    }
+
+    public boolean isTeacher() {
+        return isTeacher;
+    }
+
+    public void setIsTeacher(boolean isTeacher) {
+        this.isTeacher = isTeacher;
+    }
+
+    public boolean isStudent() {
+        return isStudent;
+    }
+
+    public void setIsStudent(boolean isStudent) {
+        this.isStudent = isStudent;
     }
 
     public int getAge() {
@@ -87,6 +107,7 @@ public class Person {
         p1.setName("Thomas Edison");
         p1.setEmail("toby@gmail.com");
         p1.setPassword("123Toby!");
+        p1.setIsStudent(true);
         try {
             Date d = new SimpleDateFormat("MM-dd-yyyy").parse("01-01-1840");
             p1.setDob(d);
@@ -97,6 +118,7 @@ public class Person {
         p2.setName("Alexander Graham Bell");
         p2.setEmail("lexb@gmail.com");
         p2.setPassword("123LexB!");
+        p2.setIsStudent(true);
         try {
             Date d = new SimpleDateFormat("MM-dd-yyyy").parse("01-01-1845");
             p2.setDob(d);
@@ -107,6 +129,7 @@ public class Person {
         p3.setName("Nikola Tesla");
         p3.setEmail("niko@gmail.com");
         p3.setPassword("123Niko!");
+        p3.setIsStudent(true);
         try {
             Date d = new SimpleDateFormat("MM-dd-yyyy").parse("01-01-1850");
             p3.setDob(d);
@@ -117,6 +140,7 @@ public class Person {
         p4.setName("Madam Currie");
         p4.setEmail("madam@gmail.com");
         p4.setPassword("123Madam!");
+        p4.setIsStudent(true);
         try {
             Date d = new SimpleDateFormat("MM-dd-yyyy").parse("01-01-1860");
             p4.setDob(d);
@@ -127,6 +151,7 @@ public class Person {
         p5.setName("John Mortensen");
         p5.setEmail("jm1021@gmail.com");
         p5.setPassword("123Qwerty!");
+        p5.setIsTeacher(true);
         try {
             Date d = new SimpleDateFormat("MM-dd-yyyy").parse("10-21-1959");
             p5.setDob(d);
