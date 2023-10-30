@@ -3,6 +3,13 @@ package com.nighthawk.spring_portfolio.mvc.models;
 import org.apache.commons.math3.linear.*;
 import java.util.Arrays;
 
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+
 public class MultiVarAnalyticsGradeRegression {
     public static void main(String[] args) {
         // Mock data representing GitHub analytics for each student
@@ -19,6 +26,8 @@ public class MultiVarAnalyticsGradeRegression {
         double[] coefficients = calculateCoefficients(xData, yData);
 
         System.out.println("Coefficients: " + Arrays.toString(coefficients));
+
+        displayChart(xData, yData, coefficients);
     }
 
     public static double[] calculateCoefficients(double[][] xData, double[] yData) {
@@ -51,5 +60,40 @@ public class MultiVarAnalyticsGradeRegression {
         RealVector B = XtXInverse.operate(XtY);
 
         return B.toArray();
+    }
+
+    public static void displayChart(double[][] xData, double[] yData, double[] coefficients) {
+        XYSeries series = new XYSeries("Students");
+        for (int i = 0; i < xData.length; i++) {
+            series.add(xData[i][0], yData[i]);
+        }
+    
+        XYSeries regressionLine = new XYSeries("Regression Line");
+        for (int i = 0; i < xData.length; i++) {
+            double predictedY = coefficients[0] + coefficients[1] * xData[i][0];
+            regressionLine.add(xData[i][0], predictedY);
+        }
+    
+        XYSeriesCollection dataset = new XYSeriesCollection();
+        dataset.addSeries(series);
+        dataset.addSeries(regressionLine);
+    
+        JFreeChart chart = ChartFactory.createXYLineChart(
+                "Regression Analysis",
+                "Commits",
+                "Grades",
+                dataset,
+                PlotOrientation.VERTICAL,
+                true,
+                true,
+                false
+        );
+    
+        ChartPanel chartPanel = new ChartPanel(chart);
+        javax.swing.JFrame frame = new javax.swing.JFrame();
+        frame.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
+        frame.add(chartPanel);
+        frame.pack();
+        frame.setVisible(true);
     }
 }
