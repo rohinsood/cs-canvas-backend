@@ -1,6 +1,6 @@
 package com.nighthawk.spring_portfolio.mvc.auth;
 
-import io.jsonwebtoken.Claims;
+import com.google.gson.Gson;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -17,42 +17,50 @@ public class LoginHandler {
   @Autowired
   PersonJpaRepository personJpaRepository;
 
-  // creates a person's account
-  public String createJwt(String githubId, String userType) {
+  // Create a JWT for students
+  public String createStudentJwt(String githubId) {
     var time = (new Date()).getTime() + 1000 * 60 * 60 * 24;
-    Claims claims = Jwts.claims().setSubject(githubId);
-    claims.put("userType", userType); // Add the user type to claims
-    
     return Jwts.builder()
-        .setClaims(claims)
+        .setSubject(githubId)
         .setExpiration(new Date(time))
+        .claim("userType", "student")  // Set user type as "student"
         .signWith(key)
         .compact();
-}
+  }
 
+  // Create a JWT for teachers
+  public String createTeacherJwt(String specialKey) {
+    if ("mortCSA".equals(specialKey)) {
+      var time = (new Date()).getTime() + 1000 * 60 * 60 * 24;
+      return Jwts.builder()
+          .setSubject("teacher")
+          .setExpiration(new Date(time))
+          .claim("userType", "teacher")  // Set user type as "teacher"
+          .signWith(key)
+          .compact();
+    } else {
+      throw new IllegalArgumentException("Invalid special key for teacher");
+    }
+  }
 
-  // try/catch set up for searching for an account based on a custom ID
+  // Try/catch set up for searching for an account based on a person's email
   public Person decodeJwt(String jws) {
     try {
-      String githubId = Jwts.parserBuilder()
-        .setSigningKey(key)
-        .build()
-        .parseClaimsJws(jws)
-        .getBody()
-        .getSubject();
-
-      return personJpaRepository.findByEmail(githubId).orElse(null);
+      String githubId = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws).getBody().getSubject();
+      return personJpaRepository.findByEmail(githubId).get();
     } catch (Exception e) {
       System.out.println(e);
       return null;
     }
   }
 
-  // main method to test with an example custom ID
+  // Main method to test with an example email
   public static void main(String[] args) {
     LoginHandler handler = new LoginHandler();
-    String githubId = "123abc"; // Replace with a custom ID
-    String jws = handler.createJwt(githubId);
+    String githubId = "exampleGithubId";
+    Person p = new Person();
+    p.setEmail(githubId);
+    String jws = handler.createStudentJwt(githubId);
     System.out.println(jws);
     System.out.println(handler.decodeJwt(jws));
   }
