@@ -36,7 +36,7 @@ public class LoginHandler {
         .getBody()
         .getSubject();
 
-      return personJpaRepository.findByCustomId(githubId).orElse(null);
+      return personJpaRepository.findByEmail(githubId).orElse(null);
     } catch (Exception e) {
       System.out.println(e);
       return null;
