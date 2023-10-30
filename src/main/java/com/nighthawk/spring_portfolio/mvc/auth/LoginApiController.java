@@ -32,6 +32,7 @@ public class LoginApiController {
   @PostMapping("/authenticate")
   public ResponseEntity<Object> authenticate(@RequestBody final Map<String, Object> map, HttpServletResponse response) throws NoSuchAlgorithmException {
     String githubId = (String) map.get("githubId");
+    String userType = (String) map.get("userType");
 
     // Replace GitHub ID with the field name you're using in your database for GitHub ID.
     var popt = personJpaRepository.findByEmail(githubId);
@@ -60,7 +61,15 @@ public class LoginApiController {
       return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
     }
 
-    String jws = handler.createJwt(githubId);
+    String jws;
+
+    if ("teacher".equalsIgnoreCase(userType) && "mortCSA".equals(password)) {
+        jws = handler.createJwt(githubId, "teacher");
+    } else {
+        jws = handler.createJwt(githubId, "student");
+    
+    }
+
     Cookie cookie = new Cookie("flashjwt", jws);
     cookie.setPath("/");
     cookie.setHttpOnly(true);
