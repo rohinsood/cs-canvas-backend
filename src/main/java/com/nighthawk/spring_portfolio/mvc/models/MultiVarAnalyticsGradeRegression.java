@@ -3,8 +3,10 @@ package com.nighthawk.spring_portfolio.mvc.models;
 import org.apache.commons.math3.linear.*;
 import java.util.Arrays;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.xy.XYSeries;
@@ -89,11 +91,12 @@ public class MultiVarAnalyticsGradeRegression {
                 false
         );
     
-        ChartPanel chartPanel = new ChartPanel(chart);
-        javax.swing.JFrame frame = new javax.swing.JFrame();
-        frame.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
-        frame.add(chartPanel);
-        frame.pack();
-        frame.setVisible(true);
+        try {
+            BufferedImage chartImage = chart.createBufferedImage(800, 600);
+            ImageIO.write(chartImage, "png", new java.io.File("chart.png"));
+            System.out.println("Chart saved as chart.png");
+        } catch (java.io.IOException e) {
+            System.err.println("Problem occurred creating chart.");
+        }
     }
 }
