@@ -24,5 +24,15 @@ public class MockDataGenerator {
         return xData;
     }
 
+    public static double[] generateYData(double[][] xData) {
+        double[] yData = new double[xData.length];
+
+        for (int i = 0; i < xData.length; i++) {
+            yData[i] = calculateGrade((int)xData[i][0], (int)xData[i][1], (int)xData[i][2], (int)xData[i][3]);
+        }
+
+        return yData;
+    }
+
     
 }
