@@ -85,18 +85,18 @@ public class MultiVarAnalyticsGradeRegression {
         for (int i = 0; i < xData.length; i++) {
             series.add(xData[i][0], yData[i]);
         }
-
+    
         XYSeries regressionLine = new XYSeries("Regression Line");
         for (int i = 0; i < xData.length; i++) {
             double predictedY = coefficients[0] + coefficients[1] * xData[i][0];
             regressionLine.add(xData[i][0], predictedY);
         }
-
+    
         XYSeriesCollection dataset = new XYSeriesCollection();
         dataset.addSeries(series);
         dataset.addSeries(regressionLine);
-
-        JFreeChart chart = ChartFactory.createXYLineChart(
+    
+        JFreeChart chart = ChartFactory.createScatterPlot(  // <-- Change this line
                 "Grades vs " + metricName,
                 metricName,
                 "Grades",

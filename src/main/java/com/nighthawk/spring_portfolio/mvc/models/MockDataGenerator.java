@@ -10,10 +10,10 @@ public class MockDataGenerator {
         double[][] xData = new double[numStudents][4];
 
         for (int i = 0; i < numStudents; i++) {
-            int commits = 30 + random.nextInt(171); // 30 to 200
-            int pullRequests = 5 + random.nextInt(46); // 5 to 50
-            int issues = 10 + random.nextInt(91); // 10 to 100
-            int reposContributed = 2 + random.nextInt(19); // 2 to 20
+            int commits = 30 + (int) (Math.pow(random.nextDouble(), 2) * 170); // Skewed towards 30
+            int pullRequests = 5 + (int) (commits * 0.25 * random.nextDouble()); // Based on commits
+            int issues = 10 + (int) (commits * 0.5 * random.nextDouble()); // Based on commits
+            int reposContributed = 2 + (int) (commits * 0.1 * random.nextDouble()); // Based on commits
 
             xData[i][0] = commits;
             xData[i][1] = pullRequests;
