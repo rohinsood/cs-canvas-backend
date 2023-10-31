@@ -13,7 +13,7 @@ Extends the JpaRepository interface from Spring Data JPA.
 -- JpaRepository defines standard CRUD methods
 -- Via JPA the developer can retrieve database from relational databases to Java objects and vice versa.
  */
-@Document
+// @Document
 public interface PersonJpaRepository extends JpaRepository<Person, Long> {
     Optional<Person> findByEmail(String email);
     
