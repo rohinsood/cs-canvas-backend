@@ -23,23 +23,49 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 public class MultiVarAnalyticsGradeRegression {
 
-    public static void main(String[] args) {
-        int numStudents = 100;
+    public RegressionResult performRegression(int numStudents) {
         double[][] xData = MockDataGenerator.generateXData(numStudents);
         double[] yData = MockDataGenerator.generateYData(xData);
 
         double[] coefficients = calculateCoefficients(xData, yData);
-        double[] coefficientsCommits = {coefficients[0], coefficients[1]};
-        double[] coefficientsPulls = {coefficients[0], coefficients[2]};
-        double[] coefficientsIssues = {coefficients[0], coefficients[3]};
-        double[] coefficientsRepos = {coefficients[0], coefficients[4]};
 
-        System.out.println("Coefficients: " + Arrays.toString(coefficients));
+        RegressionResult result = new RegressionResult();
+        result.setCoefficients(coefficients);
+        result.setXData(xData);
+        result.setYData(yData);
 
-        displayChart(getColumn(xData, 0), yData, coefficientsCommits, "Commits");
-        displayChart(getColumn(xData, 1), yData, coefficientsPulls, "Pulls");
-        displayChart(getColumn(xData, 2), yData, coefficientsIssues, "Issues");
-        displayChart(getColumn(xData, 3), yData, coefficientsRepos, "ReposContributedTo");
+        return result;
+    }
+
+    public static class RegressionResult {
+        private double[][] xData;
+        private double[] yData;
+        private double[] coefficients;
+
+        // Getters and setters...
+        public double[][] getXData() {
+            return xData;
+        }
+
+        public void setXData(double[][] xData) {
+            this.xData = xData;
+        }
+
+        public double[] getYData() {
+            return yData;
+        }
+
+        public void setYData(double[] yData) {
+            this.yData = yData;
+        }
+
+        public double[] getCoefficients() {
+            return coefficients;
+        }
+
+        public void setCoefficients(double[] coefficients) {
+            this.coefficients = coefficients;
+        }
     }
 
     public static double[] getColumn(double[][] matrix, int columnIndex) {
