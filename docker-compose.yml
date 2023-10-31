@@ -1,19 +1,12 @@
 version: '3'
 services:
-  web_t8_tri2:
+  cs_canvas_backend:
     env_file:
       - .env
     image: cs_canvas_backend
     build: .
     ports:
-      - "8198:8085"
+      - "8097:8085"
     volumes:
-      - persistent_volume:/app/volumes
+      - /volumes:/volumes
     restart: unless-stopped
-volumes:
-  persistent_volume:
-    driver: local
-    driver_opts:
-      o: bind
-      type: none
-      device: /home/pi/apps/quizme/volumes
