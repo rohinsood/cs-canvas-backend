@@ -6,7 +6,7 @@ services:
     image: cs_canvas_backend
     build: .
     ports:
-      - "8097:8085"
+      - "8069:8085"
     volumes:
-      - /volumes:/volumes
+      - ./volumes:/volumes
     restart: unless-stopped
