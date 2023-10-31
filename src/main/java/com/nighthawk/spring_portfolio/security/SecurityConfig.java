@@ -1,18 +1,20 @@
 package com.nighthawk.spring_portfolio.security;
 
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
-/*
-* To enable HTTP Security in Spring, extend the WebSecurityConfigurerAdapter. 
-*/
-@EnableWebSecurity  // Beans to enable basic Web security
+@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    // Provide a default configuration using configure(HttpSecurity http)
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf();  // Cross-Site Request Forgery disable for JS Fetch URIs
+        http
+            .csrf().disable()
+            .authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/api/grade/predict").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/grade/predict").permitAll()  // Allow GET requests
+                .anyRequest().authenticated();
     }
 }

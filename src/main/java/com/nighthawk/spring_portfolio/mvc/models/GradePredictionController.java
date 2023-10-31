@@ -2,6 +2,8 @@ package com.nighthawk.spring_portfolio.mvc.models;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +14,8 @@ import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/api/grade")
+@CrossOrigin(origins = "*") // Allow all origins. Be cautious about this in production.
+
 public class GradePredictionController {
 
     @Autowired
@@ -21,14 +25,10 @@ public class GradePredictionController {
     public ResponseEntity<GradePredictionResponse> predictGrade(@RequestBody GradePredictionRequest request) {
         MultiVarAnalyticsGradeRegression.RegressionResult result = regressionService.performRegression(request.getNumStudents());
 
-        // Construct the linear computation string
+        // Extract coefficients
         double[] coeffs = result.getCoefficients();
-        String computation = String.format(
-            "%.2f*Commits + %.2f*Pulls + %.2f*Issues + %.2f*ReposContributedTo + %.2f = Predicted Score",
-            coeffs[1], coeffs[2], coeffs[3], coeffs[4], coeffs[0]
-        );
 
-        // Generate charts for each metric
+        // Generate charts for each metric and collect image URLs
         String[] metrics = {"Commits", "Pulls", "Issues", "ReposContributedTo"};
         List<String> imageUrls = new ArrayList<>();
         for (String metric : metrics) {
@@ -36,43 +36,125 @@ public class GradePredictionController {
             imageUrls.add("/images/" + metric + ".png");
         }
 
+        // Construct the response
         GradePredictionResponse response = new GradePredictionResponse();
-        response.setComputation(computation);
+        response.setCommitCoefficient(coeffs[0]);
+        response.setPullCoefficient(coeffs[1]);
+        response.setIssueCoefficient(coeffs[2]);
+        response.setReposContributedToCoefficient(coeffs[3]);
         response.setImageUrls(imageUrls);
 
         return ResponseEntity.ok(response);
     }
 
-    static class GradePredictionRequest {
-        private int numStudents;
+    @GetMapping("/predict")
+    public ResponseEntity<GradePredictionResponse> getPredictionDetails() {
+        // For demonstration purposes, returning a sample response. 
+        // You can modify this to return actual data as needed.
+        GradePredictionResponse response = new GradePredictionResponse();
+        response.setCommitCoefficient(0.5); // Sample coefficient
+        response.setPullCoefficient(0.4);   // Sample coefficient
+        response.setIssueCoefficient(0.3);  // Sample coefficient
+        response.setReposContributedToCoefficient(0.2); // Sample coefficient
+        response.setImageUrls(List.of("SampleImageUrl1", "SampleImageUrl2"));
+        return ResponseEntity.ok(response);
+    }
 
+    static class GradePredictionRequest {
+        private final int numStudents = 250; // Initialize with 250 and make it final
+        private int commits;
+        private int pulls;
+        private int issues;
+        private int repos;
+    
+        // Only Getter for numStudents (no setter since we don't want it to be changed)
         public int getNumStudents() {
             return numStudents;
         }
-
-        public void setNumStudents(int numStudents) {
-            this.numStudents = numStudents;
+    
+        // Getter and Setter for commits
+        public int getCommits() {
+            return commits;
+        }
+    
+        public void setCommits(int commits) {
+            this.commits = commits;
+        }
+    
+        // Getter and Setter for pulls
+        public int getPulls() {
+            return pulls;
+        }
+    
+        public void setPulls(int pulls) {
+            this.pulls = pulls;
+        }
+    
+        // Getter and Setter for issues
+        public int getIssues() {
+            return issues;
+        }
+    
+        public void setIssues(int issues) {
+            this.issues = issues;
+        }
+    
+        // Getter and Setter for repos
+        public int getRepos() {
+            return repos;
+        }
+    
+        public void setRepos(int repos) {
+            this.repos = repos;
         }
     }
+    
 
     static class GradePredictionResponse {
-        private String computation;
+        private double commitCoefficient;
+        private double pullCoefficient;
+        private double issueCoefficient;
+        private double reposContributedToCoefficient;
         private List<String> imageUrls; // URLs to the generated chart images
-
-        public String getComputation() {
-            return computation;
+    
+        public double getCommitCoefficient() {
+            return commitCoefficient;
         }
-
-        public void setComputation(String computation) {
-            this.computation = computation;
+    
+        public void setCommitCoefficient(double commitCoefficient) {
+            this.commitCoefficient = commitCoefficient;
         }
-
+    
+        public double getPullCoefficient() {
+            return pullCoefficient;
+        }
+    
+        public void setPullCoefficient(double pullCoefficient) {
+            this.pullCoefficient = pullCoefficient;
+        }
+    
+        public double getIssueCoefficient() {
+            return issueCoefficient;
+        }
+    
+        public void setIssueCoefficient(double issueCoefficient) {
+            this.issueCoefficient = issueCoefficient;
+        }
+    
+        public double getReposContributedToCoefficient() {
+            return reposContributedToCoefficient;
+        }
+    
+        public void setReposContributedToCoefficient(double reposContributedToCoefficient) {
+            this.reposContributedToCoefficient = reposContributedToCoefficient;
+        }
+    
         public List<String> getImageUrls() {
             return imageUrls;
         }
-
+    
         public void setImageUrls(List<String> imageUrls) {
             this.imageUrls = imageUrls;
         }
-    }
+    }    
 }
