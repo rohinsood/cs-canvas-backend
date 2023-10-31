@@ -20,7 +20,9 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import org.springframework.stereotype.Component;
 
+@Component
 public class MultiVarAnalyticsGradeRegression {
 
     public RegressionResult performRegression(int numStudents) {
@@ -183,7 +185,7 @@ public class MultiVarAnalyticsGradeRegression {
     
         try {
             BufferedImage chartImage = chart.createBufferedImage(800, 600);
-            ImageIO.write(chartImage, "png", new java.io.File( metricName + ".png"));
+            ImageIO.write(chartImage, "png", new java.io.File("src/main/resources/static/images" + metricName + ".png"));
             System.out.println("Chart saved as " + metricName + ".png");
         } catch (java.io.IOException e) {
             System.err.println("Problem occurred creating chart.");

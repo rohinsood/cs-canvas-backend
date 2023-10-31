@@ -2,6 +2,9 @@ package com.nighthawk.spring_portfolio.mvc.models;
 
 import java.util.Random;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class MockDataGenerator {
 
     private static final Random random = new Random();
