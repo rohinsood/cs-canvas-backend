@@ -13,6 +13,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // Provide a default configuration using configure(HttpSecurity http)
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();  // Cross-Site Request Forgery disable for JS Fetch URIs
+        http.csrf();  // Cross-Site Request Forgery disable for JS Fetch URIs
     }
 }
