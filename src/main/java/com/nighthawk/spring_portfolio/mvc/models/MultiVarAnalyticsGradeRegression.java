@@ -1,11 +1,16 @@
 package com.nighthawk.spring_portfolio.mvc.models;
 
-import org.apache.commons.math3.linear.*;
+import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
 import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 
+import org.apache.commons.math3.linear.Array2DRowRealMatrix;
+import org.apache.commons.math3.linear.ArrayRealVector;
+import org.apache.commons.math3.linear.LUDecomposition;
+import org.apache.commons.math3.linear.MatrixUtils;
+import org.apache.commons.math3.linear.RealMatrix;
+import org.apache.commons.math3.linear.RealVector;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
@@ -22,10 +27,25 @@ public class MultiVarAnalyticsGradeRegression {
 
         // Calculate coefficients
         double[] coefficients = calculateCoefficients(xData, yData);
+        double[] coefficientsCommits = {coefficients[0], coefficients[1]};
+        double[] coefficientsPulls = {coefficients[0], coefficients[2]};
+        double[] coefficientsIssues = {coefficients[0], coefficients[3]};
+        double[] coefficientsRepos = {coefficients[0], coefficients[4]};
 
         System.out.println("Coefficients: " + Arrays.toString(coefficients));
 
-        displayChart(xData, yData, coefficients);
+        displayChart(getColumn(xData, 0), yData, coefficientsCommits, "Commits");
+        displayChart(getColumn(xData, 1), yData, coefficientsPulls, "Pulls");
+        displayChart(getColumn(xData, 2), yData, coefficientsIssues, "Issues");
+        displayChart(getColumn(xData, 3), yData, coefficientsRepos, "ReposContributedTo");
+    }
+
+    public static double[][] getColumn(double[][] matrix, int columnIndex) {
+        double[][] column = new double[matrix.length][1];
+        for (int i = 0; i < matrix.length; i++) {
+            column[i][0] = matrix[i][columnIndex];
+        }
+        return column;
     }
 
     public static double[] calculateCoefficients(double[][] xData, double[] yData) {
@@ -60,25 +80,25 @@ public class MultiVarAnalyticsGradeRegression {
         return B.toArray();
     }
 
-    public static void displayChart(double[][] xData, double[] yData, double[] coefficients) {
+    public static void displayChart(double[][] xData, double[] yData, double[] coefficients, String metricName) {
         XYSeries series = new XYSeries("Students");
         for (int i = 0; i < xData.length; i++) {
             series.add(xData[i][0], yData[i]);
         }
-    
+
         XYSeries regressionLine = new XYSeries("Regression Line");
         for (int i = 0; i < xData.length; i++) {
             double predictedY = coefficients[0] + coefficients[1] * xData[i][0];
             regressionLine.add(xData[i][0], predictedY);
         }
-    
+
         XYSeriesCollection dataset = new XYSeriesCollection();
         dataset.addSeries(series);
         dataset.addSeries(regressionLine);
-    
+
         JFreeChart chart = ChartFactory.createXYLineChart(
-                "Regression Analysis",
-                "Commits",
+                "Grades vs " + metricName,
+                metricName,
                 "Grades",
                 dataset,
                 PlotOrientation.VERTICAL,
@@ -86,11 +106,11 @@ public class MultiVarAnalyticsGradeRegression {
                 true,
                 false
         );
-    
+
         try {
             BufferedImage chartImage = chart.createBufferedImage(800, 600);
-            ImageIO.write(chartImage, "png", new java.io.File("chart.png"));
-            System.out.println("Chart saved as chart.png");
+            ImageIO.write(chartImage, "png", new java.io.File("src/main/resources/static/images/" + metricName + ".png"));
+            System.out.println("Chart saved as " + metricName + ".png");
         } catch (java.io.IOException e) {
             System.err.println("Problem occurred creating chart.");
         }
