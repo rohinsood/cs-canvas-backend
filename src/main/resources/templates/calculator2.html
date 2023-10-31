@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layouts/base}" lang="en">
+
+<head>
+  <title>Calculator 2</title>
+</head>
+
+<body>
+<th:block layout:fragment="body" th:remove="tag">
+  <!-- Start of body content specific to page -->
+  <div class="px-4 py-5 my-5">
+    <h3 class="display-5 fw-bold">Type an expression</h3>
+
+      <div>
+        <label for="calculator2Field">expression</label>
+        <input name="expression" id="calculator2Field">
+        <button onclick="getResult()">calculate!</button>
+        <p id="result">bgdsadfsdfa</p>
+      </div>
+  </div>
+  <!-- End of body content specific to page -->
+</th:block>
+</body>
+
+</html>
+
+<script>
+  const resultContainer = document.getElementById('result');
+  const expression = document.getElementById('calculator2Field');
+  const url = "http://localhost:8085/api/calculator2/"
+  const options = {
+    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    mode: 'same-origin', // no-cors, *cors, same-origin
+    cache: 'default', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'omit', // include, *same-origin, omit
+    headers: {
+      'Content-Type': 'application/json'
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+    },
+  };
+  function getResult() {
+    console.log(expression.value);
+    fetch(url, {
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        mode: 'same-origin', // no-cors, *cors, same-origin
+        cache: 'default', // *default, no-cache, reload, force-cache, only-if-cached
+        credentials: 'omit', // include, *same-origin, omit
+        headers: {
+          'Content-Type': 'application/json'
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: expression.value,
+      })
+    .then(response => {
+      if (response.status !== 200) {
+        const errorMsg = 'Database response error: ' + response.status;
+        console.log(errorMsg);
+        resultContainer.innerHTML = errorMsg;
+      }
+      response.text().then(data => {
+        resultContainer.innerHTML = data;
+      })
+      
+      
+    })
+  }
+  
+</script>

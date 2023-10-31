@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 public class ExceptionHandlerAdvice {
     
     @ExceptionHandler(JsonProcessingException.class)
-    public ResponseEntity<String> jsonProcessingException(JsonProcessingException e) {
+    public ResponseEntity jsonProcessingException(JsonProcessingException e) {
         // log exception
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -20,7 +20,7 @@ public class ExceptionHandlerAdvice {
     } 
     
     @ExceptionHandler(JsonMappingException.class)
-    public ResponseEntity<String> jsonMappingException(JsonMappingException e) {
+    public ResponseEntity jsonMappingException(JsonMappingException e) {
         // log exception
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)

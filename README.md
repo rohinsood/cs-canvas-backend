@@ -1,29 +1,44 @@
-# [Spring Portfolio Starter](https://nighthawkcodingsociety.com/projectsearch/details/Spring%20Portfolio%20Starter)
+## Team 8: Code Cards
 
-- Runtime link: https://spring.nighthawkcodingsociety.com/
-- JWT Login: https://nighthawkcoders.github.io/APCSA/data/login
-- Jokes endpoint: https://spring.nighthawkcodingsociety.com/api/jokes/
+Code Cards 🃏 is a revolutionary studying tool, letting anyone learn anything. 
+
+Features:
+- Variety of studying methods such as flashcards and quizzes so that users are thoroughly tested
+- Revolutionary statistics tracker 📊, allowing users to review what mistakes they have made so they can focus on their weakest areas
+- Huge database of flashcards 
+  - Can be updated by huge userbase or by direcly uploading a link to Quizlet flashcards
+  - Can be kept public or private
+- Interactive search bar 🔎, letting users find exactly what they need at ease
+- Secure signup and login system 🔑 using Json Web Tokens, preventing any malicious attackers from stealing user information
+
+Previews:
+
+![Login](src/main/resources/static/images/previews/Screenshot%202023-02-26%20at%207.28.11%20PM.png)
+
+Secure Login System
+
+![Search](src/main/resources/static/images/previews/Screenshot%202023-02-26%20at%207.29.12%20PM.png)
+
+Huge Flashcard Database
+
+![Flashcards 1](src/main/resources/static/images/previews/Screenshot%202023-02-26%20at%207.30.42%20PM.png)
+
+![Flashcards 2](src/main/resources/static/images/previews/Screenshot%202023-02-26%20at%207.30.05%20PM.png)
+
+Flashcards
+
+![Quizzes](src/main/resources/static/images/previews/Screenshot%202023-02-26%20at%207.32.57%20PM.png)
+
+Practice Quizzes
+
+![Importing](src/main/resources/static/images/previews/Screenshot%202023-02-26%20at%207.31.45%20PM.png)
+
+Importing from Quizlet
 
 
 
-## Visual thoughts
+Start studying with Code Cards 🃏 today!
 
-- Starter code should be fun and practical
-- Organize with Bootstrap menu 
-- Add some color and fun through VANTA Visuals (birds, halo, solar, net)
-- Show some practical and fun links (hrefs) like Twitter, Git, Youtube
-- Show student project specific links (hrefs) per page
-- Show student About me pages
+Runtime link: https://csa.rohanj.dev
 
-## Getting started
-
-- Clone project and open in VSCode
-- Verify Project Structure to use a good Java JDK (adoptopenjdk:17)
-- Play or entry point is Main.java, look for Run option in code.  This eanbles Spring to load
-- Java source (src/main/java/...) has Java files.  Find "controllers" path, these files enable HTTP route and HTML file relationship.
-- HTML source (src/main/resources/...) had templates and supporting files.  Find index.html as this file is launched by defaul in Spring.  Other HTML files are loaded by building an "@Controller"
-
-## IDE management
-
-- A ".gitignore" can teach a Developer a lot about Java runtime.  A target directory is created when you press play button, byte code is generated and files are moved into this location.
-- "pom.xml" file can teach you a lot about Java dependencies.  This is similar to "requirements.txt" file in Python.  It manages packages and dependencies.
+Credit for Repository Template: https://github.com/nighthawkcoders/spring_portfolio
