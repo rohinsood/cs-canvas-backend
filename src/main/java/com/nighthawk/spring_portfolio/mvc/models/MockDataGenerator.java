@@ -40,6 +40,6 @@ public class MockDataGenerator {
         double issueGrade = (issues <= 30) ? 60 + (issues - 10) * 1.5 : 90 + (10 * (1 - 1 / Math.log(issues - 9)));
         double repoGrade = (reposContributed <= 7) ? 60 + (reposContributed - 2) * 5 : 90 + (10 * (1 - 1 / Math.log(reposContributed - 1)));
 
-        return 0.7 * commitGrade + 0.1 * pullRequestGrade + 0.1 * issueGrade + 0.1 * repoGrade;
+        return 0.4 * commitGrade + 0.2 * pullRequestGrade + 0.2 * issueGrade + 0.2 * repoGrade;
     }
 }
