@@ -95,7 +95,7 @@ public class MultiVarAnalyticsGradeRegression {
 
         RegressionResult result = new RegressionResult();
         result.setCoefficients(coefficients);
-        result.setXData(normalizedXData);  // Store normalized xData in the result
+        result.setXData(xData);  // Store normalized xData in the result
         result.setYData(yData);
 
         return result;
@@ -200,28 +200,22 @@ public class MultiVarAnalyticsGradeRegression {
     public static void displayChart(double[] xData, double[] yData, double[] coefficients, String metricName) {
         XYSeries series = new XYSeries("Students");
         XYSeries regressionLine = new XYSeries("Regression Line");
-        XYSeries outliers = new XYSeries("Outliers");
-    
-        double q1 = calculateQuantile(xData, 0.25);
-        double q3 = calculateQuantile(xData, 0.75);
-        double iqr = q3 - q1;
-        double lowerBound = q1 - 0.5 * iqr;
-        double upperBound = q3 + 0.5 * iqr;
     
         for (int i = 0; i < xData.length; i++) {
-            if (xData[i] < lowerBound || xData[i] > upperBound) {
-                outliers.add(xData[i], yData[i]);
-            } else {
-                series.add(xData[i], yData[i]);
-                double predictedY = coefficients[0] + coefficients[1] * xData[i];
-                regressionLine.add(xData[i], predictedY);
-            }
+            series.add(xData[i], yData[i]);
+        }
+    
+        // Plotting the regression line across a range of x-values
+        double minX = Arrays.stream(xData).min().orElse(0);
+        double maxX = Arrays.stream(xData).max().orElse(1);
+        for (double x = minX; x <= maxX; x += (maxX - minX) / 100.0) {  // 100 points for the regression line
+            double predictedY = coefficients[0] + coefficients[1] * x;
+            regressionLine.add(x, predictedY);
         }
     
         XYSeriesCollection dataset = new XYSeriesCollection();
         dataset.addSeries(series);
         dataset.addSeries(regressionLine);
-        dataset.addSeries(outliers);
     
         JFreeChart chart = ChartFactory.createScatterPlot(
                 "Grades vs " + metricName,
@@ -247,7 +241,7 @@ public class MultiVarAnalyticsGradeRegression {
     
         try {
             BufferedImage chartImage = chart.createBufferedImage(800, 600);
-            ImageIO.write(chartImage, "png", new java.io.File("src/main/resources/static/images" + metricName + ".png"));
+            ImageIO.write(chartImage, "png", new java.io.File("src/main/resources/static/images/" + metricName + ".png"));
             System.out.println("Chart saved as " + metricName + ".png");
         } catch (java.io.IOException e) {
             System.err.println("Problem occurred creating chart.");

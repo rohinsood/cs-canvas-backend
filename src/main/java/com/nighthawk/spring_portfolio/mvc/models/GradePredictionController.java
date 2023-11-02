@@ -2,7 +2,7 @@ package com.nighthawk.spring_portfolio.mvc.models;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.ArrayList;
 
-
+@CrossOrigin
 @RestController
 @RequestMapping("/api/grade")
 
@@ -29,9 +29,10 @@ public class GradePredictionController {
         // Generate charts for each metric and collect image URLs
         String[] metrics = {"Commits", "Pulls", "Issues", "ReposContributedTo"};
         List<String> imageUrls = new ArrayList<>();
-        for (String metric : metrics) {
-            MultiVarAnalyticsGradeRegression.displayChart(result.getXData()[0], result.getYData(), coeffs, metric); // Assuming XData[0] corresponds to the first metric
-            imageUrls.add("/images/" + metric + ".png");
+        for (int i = 0; i < metrics.length; i++) {
+            double[] metricDataForAllStudents = extractMetricForAllStudents(result.getXData(), i);
+            MultiVarAnalyticsGradeRegression.displayChart(metricDataForAllStudents, result.getYData(), coeffs, metrics[i]);
+            imageUrls.add("/images/" + metrics[i] + ".png");
         }
 
         // Construct the response
@@ -44,6 +45,14 @@ public class GradePredictionController {
         response.setImageUrls(imageUrls);
 
         return ResponseEntity.ok(response);
+    }
+
+    public static double[] extractMetricForAllStudents(double[][] xData, int metricIndex) {
+        double[] metricData = new double[xData.length];
+        for (int j = 0; j < xData.length; j++) {
+            metricData[j] = xData[j][metricIndex];
+        }
+        return metricData;
     }
 
     static class GradePredictionRequest {
