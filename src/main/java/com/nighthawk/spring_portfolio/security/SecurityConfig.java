@@ -1,5 +1,6 @@
 package com.nighthawk.spring_portfolio.security;
 
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -14,7 +15,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // Provide a default configuration using configure(HttpSecurity http)
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable()).headers(headers -> headers
+        http.csrf(csrf -> csrf.disable()).cors(Customizer.withDefaults()).headers(headers -> headers
         .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Credentials", "true"))
         .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-ExposedHeaders", "*", "Authorization"))
         .addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Headers", "Content-Type", "Authorization", "x-csrf-token"))
