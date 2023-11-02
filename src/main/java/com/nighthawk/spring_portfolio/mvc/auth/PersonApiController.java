@@ -149,9 +149,24 @@ public class PersonApiController {
     }
 
     @GetMapping("/isAuthenticated")
-    public ResponseEntity<Object> getDB (@CookieValue("flashjwt") String jwt) {
+    public ResponseEntity<Object> getIsAuth (@CookieValue("flashjwt") String jwt) {
         Person p = handler.decodeJwt(jwt);
         if (p != null) {
+            Map<String, Object> resp = new HashMap<>();
+            resp.put("err", false);
+            return new ResponseEntity<>(resp, HttpStatus.OK);
+
+        } else {
+            Map<String, Object> resp = new HashMap<>();
+            resp.put("err", "Unauthorized");
+            return new ResponseEntity<>(resp, HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @GetMapping("/isAdmin")
+    public ResponseEntity<Object> getIsAdmin (@CookieValue("flashjwt") String jwt) {
+        Person p = handler.decodeJwt(jwt);
+        if (p != null && p.admin) {
             Map<String, Object> resp = new HashMap<>();
             resp.put("err", false);
             return new ResponseEntity<>(resp, HttpStatus.OK);
