@@ -14,7 +14,6 @@ import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/api/grade")
-@CrossOrigin(origins = "*") // Allow all origins. Be cautious about this in production.
 
 public class GradePredictionController {
 
