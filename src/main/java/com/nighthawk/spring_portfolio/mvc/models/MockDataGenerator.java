@@ -14,9 +14,9 @@ public class MockDataGenerator {
     
         for (int i = 0; i < numStudents; i++) {
             int commits = 30 + random.nextInt(120);
-            int pullRequests = 10 + random.nextInt(commits/6);  // Stronger correlation
-            int issues = 5 + random.nextInt(commits/10);      // Moderate correlation
-            int reposContributed = 2 + random.nextInt(commits/60); // Moderate correlation
+            int pullRequests = 10 + random.nextInt(50);  // Generate independently
+            int issues = 5 + random.nextInt(40);         // Generate independently
+            int reposContributed = 2 + random.nextInt(20); // Generate independently           
 
     
             xData[i][0] = commits;
