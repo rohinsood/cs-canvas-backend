@@ -82,16 +82,16 @@ public class AssignmentController {
     }
 
     @GetMapping("/getAllAssignments")
-    public ResponseEntity<Object> getAllAss() throws IOException {
+    public ResponseEntity<List<Assignment>> getAllAss() throws IOException {
         List<Assignment> assignments = assRepo.findAll();
         Map<String, Object> response = new HashMap<>();
 
         if (assignments.isEmpty()) {
             response.put("err", "Assignment not found");
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         } else {
             response.put("assignments", assignments);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return new ResponseEntity<>(assignments, HttpStatus.OK);
         }
     }
 
@@ -122,16 +122,16 @@ public class AssignmentController {
     }
 
     @GetMapping("/getAllSubmissions")
-    public ResponseEntity<Object> getAllSub() throws IOException {
+    public ResponseEntity<List<Submission>> getAllSub() throws IOException {
         List<Submission> subs = subRepo.findAll();
         Map<String, Object> response = new HashMap<>();
 
         if (subs.isEmpty()) {
             response.put("err", "Submissions not found");
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         } else {
             response.put("submissions", subs);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return new ResponseEntity<>(subs, HttpStatus.OK);
         }
     }
 
