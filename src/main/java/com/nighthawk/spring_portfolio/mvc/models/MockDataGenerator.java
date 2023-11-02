@@ -11,19 +11,19 @@ public class MockDataGenerator {
 
     public static double[][] generateXData(int numStudents) {
         double[][] xData = new double[numStudents][4];
-
+    
         for (int i = 0; i < numStudents; i++) {
-            int commits = 30 + (int) (Math.pow(random.nextDouble(), 2) * 170); // Skewed towards 30
-            int pullRequests = 5 + (int) (commits * 0.25 * random.nextDouble()); // Based on commits
-            int issues = 10 + (int) (commits * 0.5 * random.nextDouble()); // Based on commits
-            int reposContributed = 2 + (int) (commits * 0.1 * random.nextDouble()); // Based on commits
-
+            int commits = 30 + random.nextInt(170); // Uniform distribution between 30 and 200
+            int pullRequests = 5 + random.nextInt(43); // Uniform distribution between 5 and 48
+            int issues = 10 + random.nextInt(91); // Uniform distribution between 10 and 101
+            int reposContributed = 2 + random.nextInt(19); // Uniform distribution between 2 and 21
+    
             xData[i][0] = commits;
             xData[i][1] = pullRequests;
             xData[i][2] = issues;
             xData[i][3] = reposContributed;
         }
-
+    
         return xData;
     }
 
