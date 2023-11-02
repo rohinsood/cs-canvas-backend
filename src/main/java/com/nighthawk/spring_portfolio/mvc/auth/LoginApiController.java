@@ -30,8 +30,11 @@ public class LoginApiController {
   PersonJpaRepository personJpaRepository;
 
   @PostMapping("/authenticate")
-  public ResponseEntity<Object> authenticate(@RequestBody final Map<String, Object> map, HttpServletResponse response) throws NoSuchAlgorithmException {
+  // public ResponseEntity<Object> authenticate(@RequestBody final Map<String, Object> map, @CookieValue(value = "flashjwt", required = false) String jwt, HttpServletResponse response) throws NoSuchAlgorithmException {
+  
+  public ResponseEntity<Object> authenticate(@RequestBody final Map<String, Object> map, @CookieValue(value = "flashjwt") String jwt, HttpServletResponse response) throws NoSuchAlgorithmException {
     var popt = personJpaRepository.findByEmail((String) map.get("email"));
+
     if (!popt.isPresent()) {
       // error handling
       Map<String, Object> resp = new HashMap<>();
