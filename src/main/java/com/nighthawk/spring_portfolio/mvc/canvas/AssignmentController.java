@@ -66,9 +66,23 @@ public class AssignmentController {
       
   }
 
-  @PostMapping("/getAssignmentByName")
-  public ResponseEntity<Object> createAssignment (@RequestBody final Map<String, Object> map) throws IOException {
+  @GetMapping("/getAssignmentByName")
+  public ResponseEntity<Object> getAssByName (@RequestBody final Map<String, Object> map) throws IOException {
       List<Assignment> assignments = assRepo.findAssignmentByName((String) map.get("name"));
+      Map<String, Object> response = new HashMap<>();
+
+      if (assignments.isEmpty()) {
+          response.put("err", "Assignment not found");
+          return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+      } else {
+          response.put("assignments", assignments);
+          return new ResponseEntity<>(response, HttpStatus.OK);
+      }
+    }
+
+  @GetMapping("/getAllAssignments")
+  public ResponseEntity<Object> getAllAss (@RequestBody final Map<String, Object> map) throws IOException {
+      List<Assignment> assignments = assRepo.findAll();
       Map<String, Object> response = new HashMap<>();
 
       if (assignments.isEmpty()) {
@@ -106,5 +120,19 @@ public class AssignmentController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/getAllSubmissions")
+    public ResponseEntity<Object> getAllSub (@RequestBody final Map<String, Object> map) throws IOException {
+        List<Submission> subs = subRepo.findAll();
+        Map<String, Object> response = new HashMap<>();
+
+        if (subs.isEmpty()) {
+            response.put("err", "Submissions not found");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        } else {
+            response.put("submissions", subs);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+      }
     
 }
