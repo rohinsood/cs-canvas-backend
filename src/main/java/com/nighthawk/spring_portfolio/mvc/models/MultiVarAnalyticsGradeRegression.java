@@ -25,15 +25,66 @@ import org.springframework.stereotype.Component;
 @Component
 public class MultiVarAnalyticsGradeRegression {
 
+    public static void main(String[] args) {
+        // Create an instance of the class
+        MultiVarAnalyticsGradeRegression regression = new MultiVarAnalyticsGradeRegression();
+    
+        // Test with a sample number of students
+        int numStudents = 100;
+        RegressionResult result = regression.performRegression(numStudents);
+    
+        // Print the coefficients
+        System.out.println("Regression Coefficients: " + Arrays.toString(result.getCoefficients()));
+    
+        // Test cases with descriptors
+        double[][] testXData = {
+            {35, 8, 15, 3},  // Sample descriptor 1
+            {50, 12, 25, 5}, // Sample descriptor 2
+            {70, 18, 35, 7}  // Sample descriptor 3
+        };
+    
+        for (int i = 0; i < testXData.length; i++) {
+            double[] yData = MockDataGenerator.generateYData(testXData);
+            System.out.println("Test Case " + (i + 1) + ":");
+            System.out.println("X Data: " + Arrays.toString(testXData[i]));
+            System.out.println("Predicted Grade: " + yData[i]);
+            System.out.println("-------------------------");
+        }
+    
+        // Display the chart for the first metric (commits)
+        double[] xDataForChart = getColumn(result.getXData(), 0);
+        displayChart(xDataForChart, result.getYData(), result.getCoefficients(), "Commits");
+    }
+    
+
+    public static double[][] normalize(double[][] xData) {
+        int n = xData.length;
+        int m = xData[0].length;
+        double[][] normalizedData = new double[n][m];
+
+        for (int j = 0; j < m; j++) {
+            double[] column = getColumn(xData, j);
+            double mean = Arrays.stream(column).average().orElse(0);
+            double stddev = Math.sqrt(Arrays.stream(column).map(val -> Math.pow(val - mean, 2)).average().orElse(0));
+
+            for (int i = 0; i < n; i++) {
+                normalizedData[i][j] = (xData[i][j] - mean) / stddev;
+            }
+        }
+
+        return normalizedData;
+    }
+
     public RegressionResult performRegression(int numStudents) {
         double[][] xData = MockDataGenerator.generateXData(numStudents);
+        double[][] normalizedXData = normalize(xData);  // Normalize the xData
         double[] yData = MockDataGenerator.generateYData(xData);
 
-        double[] coefficients = calculateCoefficients(xData, yData);
+        double[] coefficients = calculateCoefficients(normalizedXData, yData);  // Use normalized xData for regression
 
         RegressionResult result = new RegressionResult();
         result.setCoefficients(coefficients);
-        result.setXData(xData);
+        result.setXData(normalizedXData);  // Store normalized xData in the result
         result.setYData(yData);
 
         return result;
