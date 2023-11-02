@@ -37,10 +37,11 @@ public class GradePredictionController {
 
         // Construct the response
         GradePredictionResponse response = new GradePredictionResponse();
-        response.setCommitCoefficient(coeffs[0]);
-        response.setPullCoefficient(coeffs[1]);
-        response.setIssueCoefficient(coeffs[2]);
-        response.setReposContributedToCoefficient(coeffs[3]);
+        response.setBias(coeffs[0]);
+        response.setCommitCoefficient(coeffs[1]);
+        response.setPullCoefficient(coeffs[2]);
+        response.setIssueCoefficient(coeffs[3]);
+        response.setReposContributedToCoefficient(coeffs[4]);
         response.setImageUrls(imageUrls);
 
         return ResponseEntity.ok(response);
@@ -60,7 +61,7 @@ public class GradePredictionController {
     }
 
     static class GradePredictionRequest {
-        private final int numStudents = 250; // Initialize with 250 and make it final
+        private final int numStudents = 1000; // Initialize with 250 and make it final
         private int commits;
         private int pulls;
         private int issues;
@@ -110,12 +111,21 @@ public class GradePredictionController {
     
 
     static class GradePredictionResponse {
+        private double bias;
         private double commitCoefficient;
         private double pullCoefficient;
         private double issueCoefficient;
         private double reposContributedToCoefficient;
         private List<String> imageUrls; // URLs to the generated chart images
     
+        public double getBias() {
+            return bias;
+        }
+    
+        public void setBias(double bias) {
+            this.bias = bias;
+        }
+
         public double getCommitCoefficient() {
             return commitCoefficient;
         }

@@ -186,7 +186,7 @@ public class MultiVarAnalyticsGradeRegression {
     
         RealMatrix Xt = X.transpose();
         RealMatrix XtX = Xt.multiply(X);
-        double lambda = 15;
+        double lambda = 0.01;
         RealMatrix identity = MatrixUtils.createRealIdentityMatrix(m + 1);
         XtX = XtX.add(identity.scalarMultiply(lambda));
         RealMatrix XtXInverse = new LUDecomposition(XtX).getSolver().getInverse();
