@@ -23,6 +23,9 @@ public class PersonApiController {
     @Autowired
     private PersonJpaRepository repository;
 
+    @Autowired
+    LoginHandler handler;
+
     /*
      * DELETE individual Person using ID
      */
@@ -143,6 +146,21 @@ public class PersonApiController {
         Map<String, Object> resp = new HashMap<>();
         resp.put("err", false);
         return new ResponseEntity<>(resp, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/isAuthenticated")
+    public ResponseEntity<Object> getDB (@CookieValue("flashjwt") String jwt) {
+        Person p = handler.decodeJwt(jwt);
+        if (p != null) {
+            Map<String, Object> resp = new HashMap<>();
+            resp.put("err", false);
+            return new ResponseEntity<>(resp, HttpStatus.OK);
+
+        } else {
+            Map<String, Object> resp = new HashMap<>();
+            resp.put("err", "Unauthorized");
+            return new ResponseEntity<>(resp, HttpStatus.UNAUTHORIZED);
+        }
     }
 
     // handles exceptions
