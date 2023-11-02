@@ -47,7 +47,7 @@ public class GradePredictionController {
     }
 
     static class GradePredictionRequest {
-        private final int numStudents = 1000; // Initialize with 250 and make it final
+        private final int numStudents = 1000; // Initialize with 1000 and make it final
     
         // Only Getter for numStudents (no setter since we don't want it to be changed)
         public int getNumStudents() {
