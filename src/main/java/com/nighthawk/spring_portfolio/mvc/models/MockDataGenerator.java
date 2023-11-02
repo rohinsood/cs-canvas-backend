@@ -38,10 +38,10 @@ public class MockDataGenerator {
     }
 
     private static double calculateGrade(int commits, int pullRequests, int issues, int reposContributed) {
-        double commitGrade = (commits <= 40) ? 60 + (commits - 30) * 3 : 90 + (10 * (1 - 1 / Math.log(commits - 29)));
-        double pullRequestGrade = (pullRequests <= 10) ? 60 + (pullRequests - 5) * 6 : 90 + (10 * (1 - 1 / Math.log(pullRequests - 4)));
-        double issueGrade = (issues <= 30) ? 60 + (issues - 10) * 1.5 : 90 + (10 * (1 - 1 / Math.log(issues - 9)));
-        double repoGrade = (reposContributed <= 7) ? 60 + (reposContributed - 2) * 5 : 90 + (10 * (1 - 1 / Math.log(reposContributed - 1)));
+        double commitGrade = (commits <= 40) ? 60 + (commits - 30) * 1 : Math.min(100, 90 + (10 * (1 - 1 / Math.log(commits - 29))));
+        double pullRequestGrade = (pullRequests <= 10) ? 60 + (pullRequests - 5) * 3 : Math.min(100, 90 + (10 * (1 - 1 / Math.log(pullRequests - 4))));
+        double issueGrade = (issues <= 30) ? 60 + (issues - 10) * 1.33 : Math.min(100, 90 + (10 * (1 - 1 / Math.log(issues - 9))));
+        double repoGrade = (reposContributed <= 7) ? 60 + (reposContributed - 2) * 5 : Math.min(100, 90 + (10 * (1 - 1 / Math.log(reposContributed - 1))));
 
         return 0.4 * commitGrade + 0.2 * pullRequestGrade + 0.2 * issueGrade + 0.2 * repoGrade;
     }
