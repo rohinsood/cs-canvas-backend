@@ -84,20 +84,20 @@ public class MultiVarAnalyticsGradeRegression {
     
         // Calculate 10th and 75th percentiles for each predictor
         double[] q10s = new double[m];
-        double[] q75s = new double[m];
+        double[] q85s = new double[m];
         for (int j = 0; j < m; j++) {
             double[] column = getColumn(xData, j);
             q10s[j] = calculateQuantile(column, 0.15);
-            q75s[j] = calculateQuantile(column, 0.85);
+            q85s[j] = calculateQuantile(column, 0.85);
         }
     
-        // Filter data to only include rows between 10th and 75th percentiles for all predictors
+        // Filter data to only include rows between 10th and 85th percentiles for all predictors
         List<double[]> filteredXList = new ArrayList<>();
         List<Double> filteredYList = new ArrayList<>();
         for (int i = 0; i < n; i++) {
             boolean include = true;
             for (int j = 0; j < m; j++) {
-                if (xData[i][j] < q10s[j] || xData[i][j] > q75s[j]) {
+                if (xData[i][j] < q10s[j] || xData[i][j] > q85s[j]) {
                     include = false;
                     break;
                 }
