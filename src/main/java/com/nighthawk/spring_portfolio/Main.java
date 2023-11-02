@@ -1,5 +1,9 @@
 package com.nighthawk.spring_portfolio;
 
+import java.io.FileNotFoundException;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -18,6 +22,13 @@ public class Main {
     public void applicationStart() {
         System.out.println("Application started!");
         System.out.println("Admin Key: " + System.getenv("ADMIN_KEY"));
+
+        Resource coolDbResource = new FileSystemResource("volumes/sqlite.db");
+
+        // Check if the file exists
+        if (coolDbResource.exists()) {
+            System.out.println("sqlite.db file found");
+        }
     }
 
 }
