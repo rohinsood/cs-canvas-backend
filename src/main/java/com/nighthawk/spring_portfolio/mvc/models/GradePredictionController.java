@@ -46,65 +46,12 @@ public class GradePredictionController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/predict")
-    public ResponseEntity<GradePredictionResponse> getPredictionDetails() {
-        // For demonstration purposes, returning a sample response. 
-        // You can modify this to return actual data as needed.
-        GradePredictionResponse response = new GradePredictionResponse();
-        response.setCommitCoefficient(0.5); // Sample coefficient
-        response.setPullCoefficient(0.4);   // Sample coefficient
-        response.setIssueCoefficient(0.3);  // Sample coefficient
-        response.setReposContributedToCoefficient(0.2); // Sample coefficient
-        response.setImageUrls(List.of("SampleImageUrl1", "SampleImageUrl2"));
-        return ResponseEntity.ok(response);
-    }
-
     static class GradePredictionRequest {
         private final int numStudents = 1000; // Initialize with 250 and make it final
-        private int commits;
-        private int pulls;
-        private int issues;
-        private int repos;
     
         // Only Getter for numStudents (no setter since we don't want it to be changed)
         public int getNumStudents() {
             return numStudents;
-        }
-    
-        // Getter and Setter for commits
-        public int getCommits() {
-            return commits;
-        }
-    
-        public void setCommits(int commits) {
-            this.commits = commits;
-        }
-    
-        // Getter and Setter for pulls
-        public int getPulls() {
-            return pulls;
-        }
-    
-        public void setPulls(int pulls) {
-            this.pulls = pulls;
-        }
-    
-        // Getter and Setter for issues
-        public int getIssues() {
-            return issues;
-        }
-    
-        public void setIssues(int issues) {
-            this.issues = issues;
-        }
-    
-        // Getter and Setter for repos
-        public int getRepos() {
-            return repos;
-        }
-    
-        public void setRepos(int repos) {
-            this.repos = repos;
         }
     }
     
