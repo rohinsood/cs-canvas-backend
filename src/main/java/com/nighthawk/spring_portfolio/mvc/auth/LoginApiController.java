@@ -19,12 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
-
-import java.security.Key;
-import java.util.Date;
 
 @RestController
 @RequestMapping("/api/login")
@@ -36,39 +30,26 @@ public class LoginApiController {
   PersonJpaRepository personJpaRepository;
 
   @PostMapping("/authenticate")
+  // public ResponseEntity<Object> authenticate(@RequestBody final Map<String, Object> map, @CookieValue(value = "flashjwt", required = false) String jwt, HttpServletResponse response) throws NoSuchAlgorithmException {
+  
   public ResponseEntity<Object> authenticate(@RequestBody final Map<String, Object> map, HttpServletResponse response) throws NoSuchAlgorithmException {
-    String userType = (String) map.get("userType"); // Get user type from the request
-    String githubId = (String) map.get("githubId");
-    String password = (String) map.get("password");
-
-    if ("teacher".equalsIgnoreCase(userType)) {
-      String specialKey = (String) map.get("specialKey");
-      if (!"mortCSA".equals(specialKey)) {
-        Map<String, Object> resp = new HashMap<>();
-        resp.put("err", "Invalid special key for teacher");
-        return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
-      }
-    } else if (!"student".equalsIgnoreCase(userType)) {
-      Map<String, Object> resp = new HashMap<>();
-      resp.put("err", "Invalid user type");
-      return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
-    }
-
-    // Replace GitHub ID with the field name you're using in your database for GitHub ID.
-    var popt = personJpaRepository.findByEmail(githubId);
+    var popt = personJpaRepository.findByEmail((String) map.get("email"));
 
     if (!popt.isPresent()) {
       // error handling
       Map<String, Object> resp = new HashMap<>();
-      resp.put("err", "No such user with GitHub ID provided");
+      resp.put("err", "No such user with email provided");
       return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
     }
     var p = popt.get();
+
+    String password = (String) map.get("password");
 
     MessageDigest digest = MessageDigest.getInstance("SHA-256");
     byte[] encodedHash = digest.digest(
         password.getBytes(StandardCharsets.UTF_8));
     String computedPasswordHash = new String(encodedHash);
+
 
     if (computedPasswordHash.equals(p.getPasswordHash())) {
       // redact password
@@ -79,15 +60,7 @@ public class LoginApiController {
       return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
     }
 
-    String jws; // Declare the jws variable here
-
-    // Check userType and generate a different token for teachers
-    if ("student".equalsIgnoreCase(userType)) {
-        jws = handler.createStudentJwt(githubId);
-    } else if ("teacher".equalsIgnoreCase(userType)) {
-        jws = handler.createTeacherJwt(specialKey);
-    }
-
+    String jws = handler.createJwt(p);
     Cookie cookie = new Cookie("flashjwt", jws);
     cookie.setPath("/");
     cookie.setHttpOnly(true);
@@ -115,15 +88,15 @@ public class LoginApiController {
       // return err ting
       Map<String, Object> resp = new HashMap<>();
       resp.put("err", "Account doesn't exist");
-      return a ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
     }
     return new ResponseEntity<>(p, HttpStatus.OK);
   }
 
   @ExceptionHandler({ MissingRequestCookieException.class })
   public ResponseEntity<Object> handleNoCookie() {
-    Map<String, Object> resp = new HashMap<>();
-    resp.put("err", "Account doesn't exist");
-    return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
+      Map<String, Object> resp = new HashMap<>();
+      resp.put("err", "Account doesn't exist");
+      return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
   }
 }

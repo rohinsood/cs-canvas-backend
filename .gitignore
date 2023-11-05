@@ -32,7 +32,8 @@ build/
 ### VS Code ###
 .vscode/
 
-### Java build ###
-*.class
-
+### Database ###
 volumes/sqlite.db
+
+### Environment Variables ###
+.env

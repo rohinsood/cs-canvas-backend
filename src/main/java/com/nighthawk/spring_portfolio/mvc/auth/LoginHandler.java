@@ -1,6 +1,5 @@
 package com.nighthawk.spring_portfolio.mvc.auth;
 
-import com.google.gson.Gson;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -16,51 +15,28 @@ public class LoginHandler {
 
   @Autowired
   PersonJpaRepository personJpaRepository;
-
-  // Create a JWT for students
-  public String createStudentJwt(String githubId) {
+  // creates a person's account
+  public String createJwt(Person user) {
     var time = (new Date()).getTime() + 1000 * 60 * 60 * 24;
-    return Jwts.builder()
-        .setSubject(githubId)
-        .setExpiration(new Date(time))
-        .claim("userType", "student")  // Set user type as "student"
-        .signWith(key)
-        .compact();
+    return Jwts.builder().setSubject(user.getEmail()).setExpiration(new Date(time)).signWith(key).compact();
   }
-
-  // Create a JWT for teachers
-  public String createTeacherJwt(String specialKey) {
-    if ("mortCSA".equals(specialKey)) {
-      var time = (new Date()).getTime() + 1000 * 60 * 60 * 24;
-      return Jwts.builder()
-          .setSubject("teacher")
-          .setExpiration(new Date(time))
-          .claim("userType", "teacher")  // Set user type as "teacher"
-          .signWith(key)
-          .compact();
-    } else {
-      throw new IllegalArgumentException("Invalid special key for teacher");
-    }
-  }
-
-  // Try/catch set up for searching for an account based on a person's email
+  // try/catch set up for searching for an account based on a person's email
   public Person decodeJwt(String jws) {
     try {
-      String githubId = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws).getBody().getSubject();
-      return personJpaRepository.findByEmail(githubId).get();
+      String email = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jws).getBody().getSubject();
+      return personJpaRepository.findByEmail(email).get();
     } catch (Exception e) {
       System.out.println(e);
       return null;
     }
   }
-
-  // Main method to test with an example email
+  // main method to test with example email
   public static void main(String[] args) {
     LoginHandler handler = new LoginHandler();
-    String githubId = "exampleGithubId";
+    String email = "balls@gmail.com";
     Person p = new Person();
-    p.setEmail(githubId);
-    String jws = handler.createStudentJwt(githubId);
+    p.setEmail(email);
+    String jws = handler.createJwt(p);
     System.out.println(jws);
     System.out.println(handler.decodeJwt(jws));
   }
