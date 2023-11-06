@@ -25,7 +25,9 @@ import com.nighthawk.spring_portfolio.mvc.auth.Person;
 import java.util.List;
 
 @RestController
+// indicates that the class is a controller where every method returns a domain object instead of a view. 
 @RequestMapping("/api/canvas")
+//This sets the base path for all the request mappings defined in this controller.
 public class AssignmentController {
 
     @Autowired
@@ -38,6 +40,7 @@ public class AssignmentController {
     SubmissionRepository subRepo;
 
     @PostMapping("/createAssignment")
+    // This annotation maps HTTP POST requests onto the createAssignment method. The method takes a JWT (JSON Web Token) from a cookie and a request body as input.
     public ResponseEntity<Object> createAssignment(@CookieValue("flashjwt") String jwt,
             @RequestBody final Map<String, Object> map) throws IOException {
         Person p = handler.decodeJwt(jwt);
@@ -68,6 +71,7 @@ public class AssignmentController {
     }
 
     @GetMapping("/getAssignmentByName")
+    //This maps HTTP GET requests to retrieve assignments by name. It returns a list of assignments or an error if no assignments are found.
     public ResponseEntity<Object> getAssByName(@RequestBody final Map<String, Object> map) throws IOException {
         List<Assignment> assignments = assRepo.findAssignmentByName((String) map.get("name"));
         Map<String, Object> response = new HashMap<>();
