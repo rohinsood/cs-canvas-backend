@@ -95,7 +95,7 @@ public class MultiVarAnalyticsGradeRegression {
 
         RegressionResult result = new RegressionResult();
         result.setCoefficients(coefficients);
-        result.setXData(xData);  // Store normalized xData in the result
+        result.setXData(xData);  // Store non-normalized xData in the result for graphing
         result.setYData(yData);
 
         return result;
@@ -145,11 +145,11 @@ public class MultiVarAnalyticsGradeRegression {
         int m = xData[0].length;
     
         // Calculate 10th and 75th percentiles for each predictor
-        double[] q10s = new double[m];
+        double[] q15s = new double[m];
         double[] q85s = new double[m];
         for (int j = 0; j < m; j++) {
             double[] column = getColumn(xData, j);
-            q10s[j] = calculateQuantile(column, 0.15);
+            q15s[j] = calculateQuantile(column, 0.15);
             q85s[j] = calculateQuantile(column, 0.85);
         }
     
@@ -159,7 +159,7 @@ public class MultiVarAnalyticsGradeRegression {
         for (int i = 0; i < n; i++) {
             boolean include = true;
             for (int j = 0; j < m; j++) {
-                if (xData[i][j] < q10s[j] || xData[i][j] > q85s[j]) {
+                if (xData[i][j] < q15s[j] || xData[i][j] > q85s[j]) {
                     include = false;
                     break;
                 }
