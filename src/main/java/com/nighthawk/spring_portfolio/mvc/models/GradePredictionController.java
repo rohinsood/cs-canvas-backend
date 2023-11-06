@@ -31,7 +31,7 @@ public class GradePredictionController {
         List<String> imageUrls = new ArrayList<>();
         for (int i = 0; i < metrics.length; i++) {
             double[] metricDataForAllStudents = extractMetricForAllStudents(result.getXData(), i);
-            MultiVarAnalyticsGradeRegression.displayChart(metricDataForAllStudents, result.getYData(), coeffs, metrics[i]);
+            MultiVarAnalyticsGradeRegression.displayChart(metricDataForAllStudents, result.getYData(), new double[]{coeffs[0], coeffs[i+1]}, metrics[i]);
             imageUrls.add("/images/" + metrics[i] + ".png");
         }
 
